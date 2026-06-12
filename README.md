@@ -1,3 +1,2 @@
 # f1
-passion project for raehalynn boyer
-for you my love
+Project to build a stronger understanding of API usage and tokens
