@@ -1,10 +1,23 @@
-const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_key=latest"
-const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=latest"
-const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key>= 1279"
+const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_key=1286"
+const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=1286"
+const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key=1286"
 const meetingstart = "https://api.openf1.org/v1/meetings?year=2026"
 const drivdata = "https://api.openf1.org/v1/drivers?driver_number=1&session_key=latest"
 const workerUrl = "https://f1access.adlaird6471.workers.dev"
 const driverNumbers = [1, 3, 5, 6, 10, 11, 12, 14, 16, 18, 23, 27, 30, 31, 41, 43, 44, 55, 63, 77, 81, 87]
+const teamColors = {
+    "Mercedes": "#00D7B6",
+    "Ferrari": "#ED1131",
+    "McLaren": "#F47600",
+    "Red Bull Racing": "#4781D7",
+    "Alpine": "#00A1E8",
+    "Racing Bulls": "#6C98FF",
+    "Haas F1 Team": "#9C9FA2",
+    "Williams": "#1868DB",
+    "Audi": "#F50537",
+    "Cadillac": "#909090",
+    "Aston Martin": "#229971"
+};
 
 // New function - calls your worker with the API URL
 async function fetchData(apiUrl) {
@@ -33,7 +46,7 @@ async function getcons(){
             constructorDiv.innerHTML = '<h2>Constructor Standings</h2>';
             
             const htmlContent = await Promise.all(data.map(async (team) => {
-                const color = await teamtocolour(team.team_name);
+                const color = teamtocolour(team.team_name);
                 return `<p style="color: ${color} !important;">${team.position_current}: ${team.team_name} | Points: ${team.points_current}</p>`;
             }));
             
@@ -96,20 +109,10 @@ async function numtodriver(num){
     console.error("Error fetching driver name:", error);
 }
 }
-async function teamtocolour(team){
-    try {
-        const response = await fetch("driverdata.json");
-        const data = await response.json();
-        for (let driver of data) {
-            if (driver.team_name == team){
-                return `#${driver.team_colour}`;  // Add # here
-            }
-        }
-        return "#000000";  // Fallback if not found
-    } catch(error) {
-        return "#000000";  // Fallback on error
-    }
+function teamtocolour(team){
+    return teamColors[team] || "#00000";  // Return the color if found, otherwise fallback
 }
+
 
 
 //for later when api request count actually matters, this will prevent the same request from being made multiple times in an hour
