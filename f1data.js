@@ -1,4 +1,3 @@
-
 const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_key=latest"
 const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=latest"
 const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key>= 1279"
@@ -32,9 +31,13 @@ async function getcons(){
         if (data) {
             const constructorDiv = document.querySelector('.collum:nth-child(2)');
             constructorDiv.innerHTML = '<h2>Constructor Standings</h2>';
-            data.forEach(team => {
-                constructorDiv.innerHTML += `<p>${team.position_current}: ${team.team_name} | Points: ${team.points_current}</p>`;
-            });
+            
+            const htmlContent = await Promise.all(data.map(async (team) => {
+                const color = await teamtocolour(team.team_name);
+                return `<p style="color: ${color} !important;">${team.position_current}: ${team.team_name} | Points: ${team.points_current}</p>`;
+            }));
+            
+            constructorDiv.innerHTML += htmlContent.join('');
         }
     }
 }
@@ -92,5 +95,34 @@ async function numtodriver(num){
 }catch(error) {
     console.error("Error fetching driver name:", error);
 }
+}
+async function teamtocolour(team){
+    try {
+        const response = await fetch("driverdata.json");
+        const data = await response.json();
+        for (let driver of data) {
+            if (driver.team_name == team){
+                return `#${driver.team_colour}`;  // Add # here
+            }
+        }
+        return "#000000";  // Fallback if not found
+    } catch(error) {
+        return "#000000";  // Fallback on error
+    }
+}
+
+
+//for later when api request count actually matters, this will prevent the same request from being made multiple times in an hour
+function sleepy(hour) {
+    if (JSON.parse(localStorage.getItem("hour"))) {
+        const tc = JSON.parse(localStorage.getItem("hour"));
+        if (tc == hour) {
+            return false;
+        } else {
+            localStorage.setItem("hour", JSON.stringify(hour));
+            return true;
+        }
+    }
+
 }
 
