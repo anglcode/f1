@@ -2,7 +2,7 @@ const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_k
 const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=1286"
 const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key=1286"
 const meetingstart = "https://api.openf1.org/v1/meetings?year=2026"
-const session = "https://api.openf1.org/v1/sessions?circuit_key=15&year=2026"
+const session = "https://api.openf1.org/v1/sessions?meeting_key=latest"
 const oscardata = "https://api.openf1.org/v1/session_result?session_key=11300&driver_number=81"
 const drivdata = "https://api.openf1.org/v1/drivers?driver_number=1&session_key=latest"
 const workerUrl = "https://f1access.adlaird6471.workers.dev"
@@ -51,7 +51,6 @@ async function fetchData(apiUrl) {
         const response = await fetch(`${workerUrl}/fetch?url=${encodeURIComponent(apiUrl)}`);
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             return data;
         } else {
             console.error("Error fetching data:", response.status, await response.text());
@@ -61,6 +60,34 @@ async function fetchData(apiUrl) {
         console.error("Network error or other issue:", error);
         return null;
     }
+}
+async function getsesh(){
+    const fetchedData = await fetchData(session);
+    seshdata = [];
+    if (fetchedData) {
+        for(const data of fetchedData){
+            seshdata.push({key: data.session_key, name: data.session_name,});
+        }
+    }
+    console.log(seshdata);
+    return seshdata;
+}
+
+async function gettimes(driv){
+    const sesh = await getsesh();
+    const data = await fetchData(`https://api.openf1.org/v1/session_result?session_key>=${sesh[0].key}&session_key<=${sesh[4].key}&driver_number=${driv}`); 
+    if (data) {
+        const table = document.querySelector('#times');
+        table.innerHTML = "<tr><th>Session</th><th>Time</th></tr>";
+            const rows = data.map((result) => {
+                const cur = sesh.find(s => s.key === result.session_key);
+                if(result.dnf){result.duration = "DNF"};
+                if(result.dsq){result.duration = "DSQ"};
+                if(result.dns){result.duration = "DNS"};
+                return `<tr><td>${cur.name}</td><td>${result.duration}</td></tr>`;
+            });
+            table.innerHTML += rows.join('');
+}
 }
 
 async function getcons(){
@@ -167,5 +194,3 @@ function sleepy(hour) {
     }
 
 }
-
-getoscar(session);

@@ -34,11 +34,36 @@
         </table>
     </div>
     <div class="collum"> 
-        <h2>Oscar Piastri</h2>
-       <table id="oscar-piastri">
+        <h2>Session Times</h2>
+        <select id="dropdown" onchange="gettimes(Number(this.value))">
+            <option value="" disabled selected>Select a Driver</option>
+            <option value="81">Oscar Piastri</option>
+            <option value="1">Lando Norris</option>
+            <option value="3">Max Verstappen</option>
+            <option value="5">Gabriel Bortoleto</option>
+            <option value="6">Isack Hadjar</option>
+            <option value="10">Pierre Gasly</option>
+            <option value="11">Sergio Perez</option>
+            <option value="12">Kimi Antonelli</option>
+            <option value="14">Fernando Alonso</option>
+            <option value="16">Charles Leclerc</option>
+            <option value="18">Lance Stroll</option>
+            <option value="23">Alexander Albon</option>
+            <option value="27">Nico Hulkenberg</option>
+            <option value="30">Liam Lawson</option>
+            <option value="31">Esteban Ocon</option>
+            <option value="41">Arvid Lindblad</option>
+            <option value="43">Franco Colapinto</option>
+            <option value="44">Lewis Hamilton</option>
+            <option value="55">Carlos Sainz</option>
+            <option value="63">George Russel</option>
+            <option value="77">Valeri Botas</option>
+            <option value="87">Oliver Bearman</option>
+
+        </select>
+       <table id="times">
             <tr>
                 <th>Session</th>
-                <th>Position</th>
                 <th>Time</th>
             </tr>
         </table>
