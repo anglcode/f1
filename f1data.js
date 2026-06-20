@@ -3,7 +3,7 @@ const constructorstanding = "https://api.openf1.org/v1/championship_teams?meetin
 const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key=1286"
 const meetingstart = "https://api.openf1.org/v1/meetings?year=2026"
 const session = "https://api.openf1.org/v1/sessions?meeting_key=latest"
-const oscardata = "https://api.openf1.org/v1/session_result?session_key=11300&driver_number=81"
+const oscardata = "https://api.openf1.org/v1/session_result?session_key=11307&driver_number=11"
 const drivdata = "https://api.openf1.org/v1/drivers?driver_number=1&session_key=latest"
 const workerUrl = "https://f1access.adlaird6471.workers.dev"
 const driverNumbers = [1, 3, 5, 6, 10, 11, 12, 14, 16, 18, 23, 27, 30, 31, 41, 43, 44, 55, 63, 77, 81, 87]
@@ -45,7 +45,7 @@ const drivercolors = {
     87: "#9C9FA2"
 };
 
-// New function - calls your worker with the API URL
+
 async function fetchData(apiUrl) {
     try {
         const response = await fetch(`${workerUrl}/fetch?url=${encodeURIComponent(apiUrl)}`);
@@ -74,23 +74,30 @@ async function getsesh(){
 }
 
 async function gettimes(driv){
+    if(cachecheck()|| !localStorage.getItem(`${driv}`)){
     const sesh = await getsesh();
     const data = await fetchData(`https://api.openf1.org/v1/session_result?session_key>=${sesh[0].key}&session_key<=${sesh[4].key}&driver_number=${driv}`); 
+    console.log(data);
     if (data) {
         const table = document.querySelector('#times');
-        table.innerHTML = "<tr><th>Session</th><th>Time</th></tr>";
+        table.innerHTML = "<tr><th>Session</th><th>Time</th><th>Gap to Leader</th></tr>";
             const rows = data.map((result) => {
                 const cur = sesh.find(s => s.key === result.session_key);
-                if(result.dnf){result.duration = "DNF"};
-                if(result.dsq){result.duration = "DSQ"};
-                if(result.dns){result.duration = "DNS"};
-                return `<tr><td>${cur.name}</td><td>${result.duration}</td></tr>`;
+               
+                return `<tr><td>${cur.name}</td><td>${timcon(result,result.duration,cur)}</td><td>${timcon(result,result.gap_to_leader,cur)}</td></tr>`;
             });
             table.innerHTML += rows.join('');
+           localStorage.setItem(`${driv}`,table.innerHTML);
 }
+    }else{
+        const table = document.querySelector('#times');
+        table.innerHTML = localStorage.getItem(`${driv}`);
+    }
+
 }
 
 async function getcons(){
+    if (cachecheck() || !localStorage.getItem('cons')){
     const fetchedData = await fetchData(constructorstanding);
     if (fetchedData) {
         const data = cleandata(fetchedData, "team_name");
@@ -102,12 +109,17 @@ async function getcons(){
             });
 
             table.innerHTML += rows.join('');
+            localStorage.setItem('cons',table.innerHTML);
         }
     }
+}
+const table = document.querySelector('#constructor-standings');
+table.innerHTML = localStorage.getItem('cons');
 }
 
 
 async function getdriv(){
+    if(cachecheck()|| !localStorage.getItem('driv')){
     const fetchedData = await fetchData(driverstanding);
     if (fetchedData) {
         const data = cleandata(fetchedData, "driver_number");
@@ -120,15 +132,12 @@ async function getdriv(){
             }));
 
             table.innerHTML += rows.join('');
+            localStorage.setItem('driv',table.innerHTML);
         }
     }
 }
-async function getoscar(api){
-    const fetchedData = await fetchData(api);
-    if (fetchedData) {
-        const data = cleandata(fetchedData, "session_key");
-        console.log(data);
-}
+const table = document.querySelector('#driver-standings');
+table.innerHTML = localStorage.getItem('driv');
 }
 
 
@@ -181,16 +190,54 @@ function drivertocolor(num){
 
 
 
-//for later when api request count actually matters, this will prevent the same request from being made multiple times in an hour
-function sleepy(hour) {
-    if (JSON.parse(localStorage.getItem("hour"))) {
-        const tc = JSON.parse(localStorage.getItem("hour"));
-        if (tc == hour) {
-            return false;
-        } else {
-            localStorage.setItem("hour", JSON.stringify(hour));
-            return true;
-        }
+function cachecheck(){
+    const now = new Date();
+    if(!localStorage.getItem('date')){
+        localStorage.clear();
+        localStorage.setItem('date',`${now.getDate()}`+ `${now.getMonth()+1}`);
+        return true;
     }
+    if(localStorage.getItem('date') !== `${now.getDate()}`+ `${now.getMonth()+1}`){
+        localStorage.clear();
+        localStorage.setItem('date',`${now.getDate()}`+ `${now.getMonth()+1}`);
+        return true;
+    }
+    return false;
+}
 
+function timcon(s,time,cur){
+
+    if(cur.name == "Qualifying" && Array.isArray(time)){
+        return time.map(t =>{
+            if(t == null){
+            if(s.dns) return 'DNS';
+            if(s.dnf) return 'DNF';
+            if(s.dsq) return 'DSQ';
+            return '--';
+            }
+            return timehelp(t);
+        }).join(` / `);
+    }
+   if(s.dns) return 'DNS';
+    if(s.dnf) return 'DNF';
+    if(s.dsq) return 'DSQ';
+    if(time == null) return '--'
+    return timehelp(time);
+}
+
+function timehelp(time){
+    const pad = (n,len=2) => String(n).padStart(len,`0`);
+    const hours = Math.floor(time/3600);
+    const minutes = Math.floor((time/60)%60);
+    const seconds = Math.floor(time%60);
+    const milliseconds = Math.floor((time%1) *1000);
+    let result;
+    if(hours>0){
+        result = `${hours}:${pad(minutes)}:${pad(seconds)}`;
+    } else if(minutes>0){
+         result = `${(minutes)}:${pad(seconds)}`;
+    }else{
+         result = `${seconds}`;
+    }
+    return `${result}.${pad(milliseconds,3)}`;
 }
