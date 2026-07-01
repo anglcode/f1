@@ -218,6 +218,11 @@ function timcon(s,time,cur){
             return timehelp(t);
         }).join(` / `);
     }
+    if(cur.name== "Race"){
+        if(typeof time === 'string'){
+            return time;
+        }
+    }
    if(s.dns) return 'DNS';
     if(s.dnf) return 'DNF';
     if(s.dsq) return 'DSQ';
