@@ -1,5 +1,5 @@
-const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_key=1286"
-const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=1286"
+const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_key=latest"
+const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=latest"
 const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key=1286"
 const meetingstart = "https://api.openf1.org/v1/meetings?year=2026"
 const session = "https://api.openf1.org/v1/sessions?meeting_key=latest"
@@ -80,11 +80,11 @@ async function gettimes(driv){
     console.log(data);
     if (data) {
         const table = document.querySelector('#times');
-        table.innerHTML = "<tr><th>Session</th><th>Time</th><th>Gap to Leader</th></tr>";
+        table.innerHTML = "<tr><th>Session</th><th>Time</th><th>Position</th><th>Gap to Leader</th></tr>";
             const rows = data.map((result) => {
                 const cur = sesh.find(s => s.key === result.session_key);
                
-                return `<tr><td>${cur.name}</td><td>${timcon(result,result.duration,cur)}</td><td>${timcon(result,result.gap_to_leader,cur)}</td></tr>`;
+                return `<tr><td>${cur.name}</td><td>${timcon(result,result.duration,cur)}</td><td>${result.position}</td><td>${timcon(result,result.gap_to_leader,cur)}</td></tr>`;
             });
             table.innerHTML += rows.join('');
            localStorage.setItem(`${driv}`,table.innerHTML);
