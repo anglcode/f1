@@ -3,7 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 Data For You!</title>
-    <script src="js/lapdata.js"></script>
+    <title>Lap Data For You!</title>
+    <link rel="icon" type="image/jpeg" href="assets/heart.jpeg">
+    <script src="js/lapdata.js" type="module"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+<body>
+    <header>
+        <h1>Lap Data For You Baby!!</h1>
+        <h2 id="loader" ></h2>
+    </header>
+    <div class="row">
+    <div width="100%";class="collum" >
+       <table id="times">
+            <tr>
+                <th>Driver</th>
+                <th>Position</th>
+                <th>Best Lap Time</th>
+                <th>Lap Number</th>
+                <th>Gap to Leader</th>
+            </tr>
+        </table>
+    </div>
+    </div>
+    </div>
+    <script type="module">
+    import { setlaps } from './js/lapdata.js';
+    
+    document.addEventListener('DOMContentLoaded', setlaps);
+</script>
+</body>
+</html>

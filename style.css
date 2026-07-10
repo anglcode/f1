@@ -16,6 +16,13 @@ h1 {
     margin-bottom: 20px;
     text-align: center;
 }
+h2 {
+    font-family: 'Titillium Web', sans-serif;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 .collum {
   float: left;
   width: 33.33%;
@@ -69,6 +76,26 @@ select:focus {
 }
 option{
     color:#333
+}
+.button {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 16px;
+    padding: 12px 24px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.button:active {
+    background-color: rgba(255, 255, 255, 0.08);
 }
 @media screen and (max-width: 600px) {
     .collum {

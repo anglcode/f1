@@ -1,3 +1,4 @@
+
 const driverstanding = "https://api.openf1.org/v1/championship_drivers?meeting_key=latest"
 const constructorstanding = "https://api.openf1.org/v1/championship_teams?meeting_key=latest"
 const landodata = "https://api.openf1.org/v1/championship_drivers?driver_number=1&meeting_key=1286"
@@ -46,7 +47,7 @@ const drivercolors = {
 };
 
 
-async function fetchData(apiUrl) {
+export async function fetchData(apiUrl) {
     try {
         const response = await fetch(`${workerUrl}/fetch?url=${encodeURIComponent(apiUrl)}`);
         if (response.ok) {
@@ -140,7 +141,7 @@ table.innerHTML = localStorage.getItem('driv');
 
 async function getimage(nums){
     try {
-        const response = await fetch("driverdata.json");
+        const response = await fetch("data/driverdata.json");
         const data = await response.json();
         for (let driver of data) {
             if (driver.driver_number == nums){
@@ -164,9 +165,9 @@ function cleandata(data, feild){
         return true;
     });
 }
-async function numtodriver(num){
+export async function numtodriver(num){
     try {
-        const response = await fetch("driverdata.json");
+        const response = await fetch("data/driverdata.json");
         const data = await response.json();
         for (let driver of data) {
             if (driver.driver_number == num){
@@ -180,13 +181,13 @@ async function numtodriver(num){
 function teamtocolour(team){
     return teamColors[team] || "#00000";  // Return the color if found, otherwise fallback
 }
-function drivertocolor(num){
+export function drivertocolor(num){
     return drivercolors[num] || "#00000";  // Return the color if found, otherwise fallback
 }
 
 
 
-function cachecheck(){
+export function cachecheck(){
     const now = new Date();
     if(!localStorage.getItem('date')){
         localStorage.clear();
@@ -201,7 +202,7 @@ function cachecheck(){
     return false;
 }
 
-function timcon(s,time,cur){
+export function timcon(s,time,cur){
 
     if((cur.name == "Qualifying" || cur.name == "Sprint Qualifying") && Array.isArray(time)){
         return time.map(t =>{
@@ -226,7 +227,7 @@ function timcon(s,time,cur){
     return timehelp(time);
 }
 
-function timehelp(time){
+export function timehelp(time){
     const pad = (n,len=2) => String(n).padStart(len,`0`);
     const hours = Math.floor(time/3600);
     const minutes = Math.floor((time/60)%60);

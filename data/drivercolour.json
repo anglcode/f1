@@ -1,0 +1,90 @@
+[
+  {
+    "driver_number": 1,
+    "driver_colour": "#F47600"
+  },
+  {
+    "driver_number": 3,
+    "driver_colour": "#4781D7"
+  },
+  {
+    "driver_number": 5,
+    "driver_colour": "#F50537"
+  },
+  {
+    "driver_number": 6,
+    "driver_colour": "#4781D7"
+  },
+  {
+    "driver_number": 10,
+    "driver_colour": "#00A1E8"
+  },
+  {
+    "driver_number": 11,
+    "driver_colour": "#909090"
+  },
+  {
+    "driver_number": 12,
+    "driver_colour": "#00D7B6"
+  },
+  {
+    "driver_number": 14,
+    "driver_colour": "#229971"
+  },
+  {
+    "driver_number": 16,
+    "driver_colour": "#ED1131"
+  },
+  {
+    "driver_number": 18,
+    "driver_colour": "#229971"
+  },
+  {
+    "driver_number": 23,
+    "driver_colour": "#1868DB"
+  },
+  {
+    "driver_number": 27,
+    "driver_colour": "#F50537"
+  },
+  {
+    "driver_number": 30,
+    "driver_colour": "#6C98FF"
+  },
+  {
+    "driver_number": 31,
+    "driver_colour": "#9C9FA2"
+  },
+  {
+    "driver_number": 41,
+    "driver_colour": "#6C98FF"
+  },
+  {
+    "driver_number": 43,
+    "driver_colour": "#00A1E8"
+  },
+  {
+    "driver_number": 44,
+    "driver_colour": "#ED1131"
+  },
+  {
+    "driver_number": 55,
+    "driver_colour": "#1868DB"
+  },
+  {
+    "driver_number": 63,
+    "driver_colour": "#00D7B6"
+  },
+  {
+    "driver_number": 77,
+    "driver_colour": "#909090"
+  },
+  {
+    "driver_number": 81,
+    "driver_colour": "#F47600"
+  },
+  {
+    "driver_number": 87,
+    "driver_colour": "#9C9FA2"
+  }
+]
