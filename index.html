@@ -72,7 +72,21 @@
         </table>
     </div>
 </div>
-<script>
+<script type="module">
+    import { 
+        getcons, 
+        getdriv, 
+        gettimes, 
+        fetchData,
+        drivertocolor,
+        numtodriver,
+        cachecheck,
+        timcon,
+        timehelp
+    } from './js/f1data.js';
+    
+    window.gettimes = gettimes;
+    
     document.addEventListener('DOMContentLoaded', async () => {
         await getcons();
         await getdriv();

@@ -62,7 +62,7 @@ export async function fetchData(apiUrl) {
         return null;
     }
 }
-async function getsesh(){
+export async function getsesh(){
     const fetchedData = await fetchData(session);
     seshdata = [];
     if (fetchedData) {
@@ -74,7 +74,7 @@ async function getsesh(){
     return seshdata;
 }
 
-async function gettimes(driv){
+export async function gettimes(driv){
     if(cachecheck()|| !localStorage.getItem(`${driv}.session`)){
     const sesh = await getsesh();
     const final = sesh.find(s => s.name === "Race");
@@ -98,7 +98,7 @@ async function gettimes(driv){
 
 }
 
-async function getcons(){
+export async function getcons(){
     if (cachecheck() || !localStorage.getItem('cons')){
     const data = await fetchData(constructorstanding);
         if (data) {
@@ -117,7 +117,7 @@ table.innerHTML = localStorage.getItem('cons');
 }
 
 
-async function getdriv(){
+export async function getdriv(){
     if(cachecheck()|| !localStorage.getItem('driv')){
     const data = await fetchData(driverstanding);
         if (data) {
