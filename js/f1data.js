@@ -64,7 +64,7 @@ export async function fetchData(apiUrl) {
 }
 export async function getsesh(){
     const fetchedData = await fetchData(session);
-    seshdata = [];
+    let seshdata = [];
     if (fetchedData) {
         for(const data of fetchedData){
             seshdata.push({key: data.session_key, name: data.session_name,});
@@ -111,9 +111,9 @@ export async function getcons(){
             table.innerHTML += rows.join('');
             localStorage.setItem('cons',table.innerHTML);
         }
-}
+    }
 const table = document.querySelector('#constructor-standings');
-table.innerHTML = localStorage.getItem('cons');
+table.innerHTML = localStorage.getItem('cons');   
 }
 
 
