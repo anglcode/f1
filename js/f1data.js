@@ -74,9 +74,10 @@ async function getsesh(){
 }
 
 async function gettimes(driv){
-    if(cachecheck()|| !localStorage.getItem(`${driv}`)){
+    if(cachecheck()|| !localStorage.getItem(`${driv}.session`)){
     const sesh = await getsesh();
-    const data = await fetchData(`https://api.openf1.org/v1/session_result?session_key>=${sesh[0].key}&session_key<=${sesh[4].key}&driver_number=${driv}`); 
+    const final = sesh.find(s => s.name === "Race");
+    const data = await fetchData(`https://api.openf1.org/v1/session_result?session_key>=${sesh[0].key}&session_key<=${final.key}&driver_number=${driv}`); 
     console.log(data);
     if (data) {
         const table = document.querySelector('#times');
@@ -87,20 +88,18 @@ async function gettimes(driv){
                 return `<tr><td>${cur.name}</td><td>${timcon(result,result.duration,cur)}</td><td>${result.position}</td><td>${timcon(result,result.gap_to_leader,cur)}</td></tr>`;
             });
             table.innerHTML += rows.join('');
-           localStorage.setItem(`${driv}`,table.innerHTML);
+           localStorage.setItem(`${driv}.session`,table.innerHTML);
 }
     }else{
         const table = document.querySelector('#times');
-        table.innerHTML = localStorage.getItem(`${driv}`);
+        table.innerHTML = localStorage.getItem(`${driv}.session`);
     }
 
 }
 
 async function getcons(){
     if (cachecheck() || !localStorage.getItem('cons')){
-    const fetchedData = await fetchData(constructorstanding);
-    if (fetchedData) {
-        const data = cleandata(fetchedData, "team_name");
+    const data = await fetchData(constructorstanding);
         if (data) {
             const table = document.querySelector('#constructor-standings');
             const rows = data.map((team) => {
@@ -111,7 +110,6 @@ async function getcons(){
             table.innerHTML += rows.join('');
             localStorage.setItem('cons',table.innerHTML);
         }
-    }
 }
 const table = document.querySelector('#constructor-standings');
 table.innerHTML = localStorage.getItem('cons');
@@ -120,9 +118,7 @@ table.innerHTML = localStorage.getItem('cons');
 
 async function getdriv(){
     if(cachecheck()|| !localStorage.getItem('driv')){
-    const fetchedData = await fetchData(driverstanding);
-    if (fetchedData) {
-        const data = cleandata(fetchedData, "driver_number");
+    const data = await fetchData(driverstanding);
         if (data) {
             const table = document.querySelector('#driver-standings');
             const rows = await Promise.all(data.map(async (driver) => {
@@ -134,7 +130,7 @@ async function getdriv(){
             table.innerHTML += rows.join('');
             localStorage.setItem('driv',table.innerHTML);
         }
-    }
+    
 }
 const table = document.querySelector('#driver-standings');
 table.innerHTML = localStorage.getItem('driv');
@@ -207,7 +203,7 @@ function cachecheck(){
 
 function timcon(s,time,cur){
 
-    if(cur.name == "Qualifying" && Array.isArray(time)){
+    if((cur.name == "Qualifying" || cur.name == "Sprint Qualifying") && Array.isArray(time)){
         return time.map(t =>{
             if(t == null){
             if(s.dns) return 'DNS';
@@ -218,7 +214,7 @@ function timcon(s,time,cur){
             return timehelp(t);
         }).join(` / `);
     }
-    if(cur.name== "Race"){
+    if(cur.name== "Race" || cur.name == "Sprint"){
         if(typeof time === 'string'){
             return time;
         }
