@@ -100,7 +100,8 @@ export async function gettimes(driv){
 
 export async function getcons(){
     if (cachecheck() || !localStorage.getItem('cons')){
-    const data = await fetchData(constructorstanding);
+    const fetch = await fetchData(constructorstanding);
+    const data = cleandata(fetch, "team_name");
         if (data) {
             const table = document.querySelector('#constructor-standings');
             const rows = data.map((team) => {
@@ -119,7 +120,8 @@ table.innerHTML = localStorage.getItem('cons');
 
 export async function getdriv(){
     if(cachecheck()|| !localStorage.getItem('driv')){
-    const data = await fetchData(driverstanding);
+    const fetch = await fetchData(driverstanding);
+    const data = cleandata(fetch, "driver_number");
         if (data) {
             const table = document.querySelector('#driver-standings');
             const rows = await Promise.all(data.map(async (driver) => {
