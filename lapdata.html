@@ -10,8 +10,17 @@
 </head>
 <body>
     <header>
-        <h1>Lap Data For You Baby!!</h1>
-        <button class="button" onclick="window.location.href='index.html'">Back to Main Page!</button>
+        <div class="header-top">
+            <div class="race-info"> 
+                <h2 id = "track"></h2>
+                <h3 id = "loc"></h3>
+                <h3 id = "stage"></h3>
+            </div>
+            <h1>Lap Data For You Baby!!</h1>
+        </div>
+        <div class="header-actions">
+            <button class="button" onclick="window.location.href='index.html'">Back to Main Page!</button>
+        </div>
         <h2 id="loader" ></h2>
     </header>
     <div class="row">
@@ -29,9 +38,12 @@
     </div>
     </div>
     <script type="module">
-    import { setlaps } from './js/lapdata.js';
+    import { setlaps , getseshdata } from './js/lapdata.js';
     
-    document.addEventListener('DOMContentLoaded', setlaps);
+    document.addEventListener('DOMContentLoaded', () => {
+        setlaps();
+        getseshdata();
+    });
 </script>
 </body>
 </html>
