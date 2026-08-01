@@ -9,8 +9,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <header>
+    <div  class = "header-top">
+    <div class="race-info"> 
+                <h2 id = "track"></h2>
+                <h3 id = "loc"></h3>
+                <h3 id = "stage"></h3>
+            </div>
     <h1>F1 Data For You Baby!!</h1>
+    </div>
+    <div class = "header-actions">
     <button class="button" onclick="window.location.href='lapdata.html'">Click On Me For Lap Data!!</button>
+    </div>
 </header>
 <body>
 <div class="row">
@@ -85,12 +94,16 @@
         timehelp,
         getsesh
     } from './js/f1data.js';
-    
+    import{
+        getseshdata
+    }from './js/lapdata.js'
     window.gettimes = gettimes;
     
     document.addEventListener('DOMContentLoaded', async () => {
+        getseshdata();
         await getcons();
         await getdriv();
+        
     });
 </script>
 </body>

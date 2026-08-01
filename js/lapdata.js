@@ -1,6 +1,8 @@
 import {fetchData , timcon , timehelp, cachecheck, numtodriver, drivertocolor} from './f1data.js'; 
 const laps = "https://api.openf1.org/v1/laps?session_key=latest&lap_number>=1"
 const driverNumbers = [1, 3, 5, 6, 10, 11, 12, 14, 16, 18, 23, 27, 30, 31, 41, 43, 44, 55, 63, 77, 81, 87]
+
+//iterates through every drivers laps and manual pulls best lap time with relevant data like lap #
 export async function gettimes(){
     if(cachecheck()|| !localStorage.getItem("bestlaps")){
     let bestlap={};
@@ -28,6 +30,7 @@ export async function gettimes(){
     return false;
     }
 
+//collects bestlap data and creates ranking along with comparison to leader
 export async function setlaps(){
     if(!localStorage.getItem("bestlaps")){
        const loading = document.getElementById('loader');
@@ -53,14 +56,17 @@ export async function setlaps(){
     }
 }
 
+//captures current lap data provider 
 export async function getseshdata(){
     const url = "https://api.openf1.org/v1/sessions?session_key=latest";
     if(cachecheck()|| !localStorage.getItem("track")){
     const data = await fetchData(url);
     if (data){
+
         const trac = document.getElementById('track');
         const loca = document.getElementById('loc');
         const sta = document.getElementById('stage');
+
         trac.textContent = 'Track: ' + data[0].circuit_short_name;
         loca.textContent = 'Location: ' + data[0].country_name;
         sta.textContent = 'Stage: ' + data[0].session_name;
@@ -73,6 +79,7 @@ export async function getseshdata(){
         const trac = document.getElementById('track');
         const loca = document.getElementById('loc');
         const sta = document.getElementById('stage');
+
         trac.textContent = 'Track: ' + localStorage.getItem("track");
         loca.textContent = 'Location: ' + localStorage.getItem("loc");
         sta.textContent = 'Stage: ' + localStorage.getItem("stage");

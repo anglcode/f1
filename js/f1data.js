@@ -46,7 +46,7 @@ const drivercolors = {
     87: "#9C9FA2"
 };
 
-
+//contacts cloudflare worker to access data in safe manner as cloudflare worker secures token and rate limiting
 export async function fetchData(apiUrl) {
     try {
         const response = await fetch(`${workerUrl}/fetch?url=${encodeURIComponent(apiUrl)}`);
@@ -62,6 +62,8 @@ export async function fetchData(apiUrl) {
         return null;
     }
 }
+
+// captures most current race weekend data from meeting key which encapsulates event
 export async function getsesh(){
     const fetchedData = await fetchData(session);
     let seshdata = [];
@@ -70,10 +72,10 @@ export async function getsesh(){
             seshdata.push({key: data.session_key, name: data.session_name,});
         }
     }
-    console.log(seshdata);
     return seshdata;
 }
 
+//takes all driver data from finish in each event or "session" of the weekend (had to change from set number to variable because of sprint weekends)
 export async function gettimes(driv){
     if(cachecheck()|| !localStorage.getItem(`${driv}.session`)){
     const sesh = await getsesh();
@@ -98,6 +100,7 @@ export async function gettimes(driv){
 
 }
 
+//pulls constructor standings and displays after sorting
 export async function getcons(){
     if (cachecheck() || !localStorage.getItem('cons')){
     const fetch = await fetchData(constructorstanding);
@@ -117,7 +120,7 @@ const table = document.querySelector('#constructor-standings');
 table.innerHTML = localStorage.getItem('cons');   
 }
 
-
+//pulls driver standings and builds display after sort
 export async function getdriv(){
     if(cachecheck()|| !localStorage.getItem('driv')){
     const fetch = await fetchData(driverstanding);
@@ -140,7 +143,8 @@ table.innerHTML = localStorage.getItem('driv');
 }
 
 
-
+//BACKBURNER
+//meant to take each driver image from given link but images are grainy and shape weirdly 
 async function getimage(nums){
     try {
         const response = await fetch("data/driverdata.json");
@@ -156,7 +160,7 @@ async function getimage(nums){
 }
 
 
-
+//not sure if this actually does anything, pretty sure it does (not optimized)
 function cleandata(data, feild){
     const seen = new Set();
     return data.filter(item => {
@@ -167,6 +171,8 @@ function cleandata(data, feild){
         return true;
     });
 }
+
+//basic helper function to match driver number to driver 
 export async function numtodriver(num){
     try {
         const response = await fetch("data/driverdata.json");
@@ -180,6 +186,8 @@ export async function numtodriver(num){
     console.error("Error fetching driver name:", error);
 }
 }
+
+//both of these are pretty self explanantory
 function teamtocolour(team){
     return teamColors[team] || "#00000";  // Return the color if found, otherwise fallback
 }
@@ -188,7 +196,8 @@ export function drivertocolor(num){
 }
 
 
-
+//check cache for valid data to reduce api calls and improve data load space 
+//TODO: database??
 export function cachecheck(){
     const now = new Date();
     if(!localStorage.getItem('date')){
@@ -204,6 +213,7 @@ export function cachecheck(){
     return false;
 }
 
+//manages different race result states to avoid failures, then passes valid times to timehelp
 export function timcon(s,time,cur){
 
     if((cur.name == "Qualifying" || cur.name == "Sprint Qualifying") && Array.isArray(time)){
@@ -229,6 +239,7 @@ export function timcon(s,time,cur){
     return timehelp(time);
 }
 
+//converts bulk seconds timing into pretty HH:MM:SS:MS (i may have had some help with this)
 export function timehelp(time){
     const pad = (n,len=2) => String(n).padStart(len,`0`);
     const hours = Math.floor(time/3600);
