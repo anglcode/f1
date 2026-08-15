@@ -10,12 +10,20 @@
 </head>
 <body>
     <header>
-        <div class="header-top">
-            <div class="race-info"> 
+       <div  class = "header-top">
+    <div class="race-info">
+        <div class="track-data">
                 <h2 id = "track"></h2>
                 <h3 id = "loc"></h3>
                 <h3 id = "stage"></h3>
-            </div>
+        </div>
+        <div class="winner-data">
+            <h2>Podium</h2>
+            <h3 id = "first"></h3>
+            <h3 id = "second"></h3> 
+            <h3 id = "third"></h3>
+        </div>
+    </div>
             <h1>Lap Data For You Baby!!</h1>
         </div>
         <div class="header-actions">
@@ -38,11 +46,12 @@
     </div>
     </div>
     <script type="module">
-    import { setlaps , getseshdata } from './js/lapdata.js';
-    
-    document.addEventListener('DOMContentLoaded', () => {
+    import { setlaps , getseshdata} from './js/lapdata.js';
+    import {getpodium} from './js/f1data.js';
+    document.addEventListener('DOMContentLoaded', async () => {
         getseshdata();
         setlaps();
+        await getpodium();
     });
 </script>
 </body>

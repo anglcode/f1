@@ -10,11 +10,19 @@
 </head>
 <header>
     <div  class = "header-top">
-    <div class="race-info"> 
+    <div class="race-info">
+        <div class="track-data">
                 <h2 id = "track"></h2>
                 <h3 id = "loc"></h3>
                 <h3 id = "stage"></h3>
-            </div>
+        </div>
+        <div class="winner-data">
+            <h2>Podium</h2>
+            <h3 id = "first"></h3>
+            <h3 id = "second"></h3> 
+            <h3 id = "third"></h3>
+        </div>
+    </div>
     <h1>F1 Data For You Baby!!</h1>
     </div>
     <div class = "header-actions">
@@ -92,7 +100,8 @@
         cachecheck,
         timcon,
         timehelp,
-        getsesh
+        getsesh,
+        getpodium
     } from './js/f1data.js';
     import{
         getseshdata
@@ -103,6 +112,7 @@
         getseshdata();
         await getcons();
         await getdriv();
+        await getpodium();
         
     });
 </script>

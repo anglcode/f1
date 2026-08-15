@@ -142,6 +142,32 @@ const table = document.querySelector('#driver-standings');
 table.innerHTML = localStorage.getItem('driv');
 }
 
+export async function getpodium(){
+    if(cachecheck()|| !localStorage.getItem('podium')){
+    const data = await fetchData("https://api.openf1.org/v1/session_result?session_key=latest&position<=3");
+    if (data) {
+        console.log(data);
+        const f = document.getElementById('first');
+        const s = document.getElementById('second');
+        const t = document.getElementById('third');
+
+        f.textContent = '1st: ' + await numtodriver(data[0].driver_number);
+        s.textContent = '2nd: ' +  await numtodriver(data[1].driver_number);
+        t.textContent = '3rd: ' +  await numtodriver(data[2].driver_number);
+        localStorage.setItem('podium',JSON.stringify({first: data[0].numtodriver(data[0].driver_number), second: data[1].numtodriver(data[1].driver_number), third: data[2].numtodriver(data[2].driver_number)}));
+    return true;
+    }
+}
+        const f = document.getElementById('first');
+        const s = document.getElementById('second');
+        const t = document.getElementById('third');
+
+        f.textContent = '1st: ' + localStorage.getItem('podium') ? JSON.parse(localStorage.getItem('podium')).first : '';
+        s.textContent = '2nd: ' +  localStorage.getItem('podium') ? JSON.parse(localStorage.getItem('podium')).second : '';
+        t.textContent = '3rd: ' +  localStorage.getItem('podium') ? JSON.parse(localStorage.getItem('podium')).third : '';
+
+}
+
 
 //BACKBURNER
 //meant to take each driver image from given link but images are grainy and shape weirdly 

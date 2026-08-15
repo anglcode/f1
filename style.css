@@ -35,13 +35,50 @@ header {
 .race-info {
     grid-column: 1;
     justify-self: start;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
     align-items: flex-start;
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.04);
     border-left: 3px solid #ff2d55;
+    border-right: 3px solid #ff2d55;
     border-radius: 8px;
+}
+.track-data {
+    grid-column: 1;
+    justify-self: start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-left: 3px solid #ff2d55;
+    border-right: 3px solid #ff2d55;
+    border-radius: 8px;
+}
+.winner-data {
+    grid-column: 2;
+    justify-self: end;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: flex-start;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border-right: 3px solid #ff2d55;
+    border-left: 3px solid #ff2d55;
+    border-radius: 8px;
+}
+
+.race-info ul {
+    margin: 0;
+    padding-left: 6px;
+    list-style: disc;
+}
+
+.race-info li {
+    margin-bottom: 6px;
 }
 
 h1 {
@@ -159,6 +196,19 @@ option{
     .race-info {
         order: 2;
         margin: 0;
+    }
+    .race-info {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        width: 100%;
+    }
+    .race-info .track-data {
+        border-right: none;
+    }
+    .race-info .winner-data {
+        border-left: none;
+        justify-self: stretch;
+        align-self: stretch;
     }
     h1 {
         order: 1;
