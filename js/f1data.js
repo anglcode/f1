@@ -128,9 +128,11 @@ export async function getdriv(){
         if (data) {
             const table = document.querySelector('#driver-standings');
             const rows = await Promise.all(data.map(async (driver) => {
-                const color = drivertocolor(driver.driver_number);
                 const name = await numtodriver(driver.driver_number);
+                if( name !== null) {
+                const color = drivertocolor(driver.driver_number);
                 return `<tr style="color: ${color} !important;"><td>${driver.position_current}</td><td>${name}</td><td>${driver.points_current}</td></tr>`;
+                }
             }));
 
             table.innerHTML += rows.join('');
@@ -207,6 +209,13 @@ export async function numtodriver(num){
             if (driver.driver_number == num){
                 return driver.full_name;
             }
+    }
+    const fresh = await fetchData(`https://api.openf1.org/v1/drivers?driver_number=${num}&session_key=latest`);
+    if (fresh && fresh.length > 0) {
+        return fresh[0].full_name;
+    } else {
+        console.error("Driver not found in API response for driver number:", num);
+        return null;
     }
 }catch(error) {
     console.error("Error fetching driver name:", error);
